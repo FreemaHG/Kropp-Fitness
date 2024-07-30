@@ -1,0 +1,1243 @@
+@font-face {
+    font-family: 'Heebo';
+    src: url('./fonts/Heebo-Light.woff2') format('woff2');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Heebo';
+    src: url('./fonts/Heebo-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Yantramanav';
+    src: url('./fonts/Yantramanav-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* глобальные переменные (через root доступ во всех элементах страницы) */
+:root {
+    --color-dark: #000000;
+    --color-dark-alternate: #131619;
+    --color-light: #FFFFFF;
+    --color-dark-gray: #404040;
+    --color-light-gray: #C4C4C4;
+
+    --border-radius: 30px;
+    --border: 1px solid var(--color-light);
+    --input-height: 54px;
+    /* ширина контейнера с контекстом */
+    --container-width: 1300px;
+    /* отступы внутри контейнера, чтобы при уменьшении диагонали экрана текст не слипался с краями экрана */
+    --container-padding-x: 15px;
+    /* время выполнения анимаций */
+    --transition-duration: 0.2s;
+
+    --font-family-base: 'Heebo', sans-serif;
+    --font-family-accent: 'Yantramanav', sans-serif;
+
+    /* высота header (нужна для динамического расчета высоты банер при уменьшении экрана) */
+    --header-height: 90px;
+}
+
+/* глобальные стили */
+body {
+    font-family: var(--font-family-base);
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.75;
+    /* наиболее часто встречаемый цвет текста */
+    color: var(--color-light-gray);
+    background-color: var(--color-dark);
+}
+
+/* во всех svg-элементах меняем цвет на текущий цвет элемента */
+svg *[fill] {
+    fill: currentColor
+}
+
+/* во всех svg-элементах меняем цвет на текущий цвет элемента */
+svg *[stroke] {
+    fill: currentColor
+}
+
+/* плавная анимация для всех требуемых элементов */
+a,
+button,
+input,
+textarea,
+svg * {
+    transition-duration: var(--transition-duration);
+}
+
+/* явно указываем к каким свойствам в svg применять плавность смены свойств (анимацию) */
+svg * {
+    transition-property: fill, stroke;
+}
+
+a {
+    color: var(--color-light);
+}
+
+/* смена цвета при наведении на ссылки */
+a:hover {
+    color: var(--color-light-gray);
+}
+
+p {
+    margin-block: 0;
+}
+
+/* все не последние теги, у которых нет атрибута class */
+p:not([class]):not(:last-child) {
+    margin-bottom: 24px;
+}
+
+.container {
+    /* максимальная ширина сложится из ширины контейнера + 2 боковых отступа */
+    max-width: calc(var(--container-width) + var(--container-padding-x) * 2);
+    /* центруем контент по середине */
+    margin-inline: auto;
+    /* внутренний горизонтальный отступ */
+    padding-inline: var(--container-padding-x);
+}
+
+/* отдельный стиль для переиспользуемых свойств */
+.container-wide {
+    max-width: 1920px;
+    margin-inline: auto;
+}
+
+/* скрытие элементов, чтобы они оставались для скринридеров */
+.visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    margin: -1px !important;
+    border: 0 !important;
+    padding: 0 !important;
+    white-space: nowrap !important;
+    clip-path: inset(100%) !important;
+    clip: rect(0 0 0 0) !important;
+    overflow: hidden !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--color-light);
+}
+
+.button {
+    display: inline-flex;
+    align-items: center;
+    height: 38px;
+    padding-inline: 26px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 2;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    /* запрещаем перенос слов в кнопке */
+    white-space: nowrap;
+    background-color: var(--color-light);
+    border: none;
+    border-radius: var(--border-radius);
+}
+
+.button:hover {
+    background-color: var(--color-light-gray);
+}
+
+.button.transparent {
+    position: relative;
+    height: var(--input-height);
+    padding-left: 31px;
+    padding-right: 80px;
+    color: var(--color-light);
+    background-color: transparent;
+    border: var(--border);
+}
+
+.button.transparent::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    height: 100%;
+    aspect-ratio: 1;
+    background: url('./icons/arrow-top-right.svg') center/70% no-repeat;
+    border: var(--border);
+    border-radius: 50%;
+}
+
+.button.transparent:hover {
+    color: var(--color-dark);
+    background-color: var(--color-light-gray);
+}
+
+.input {
+    width: 100%;
+    height: var(--input-height);
+    padding-inline: 25px;
+    color: var(--color-light-gray);
+    background-color: transparent;
+    border: 1px solid var(--color-light-gray);
+    border-radius: var(--border-radius);
+}
+
+/* цвет подсказки в инпуте и значения, выбранного по умолчанию в select */
+.input::placeholder,
+select.input:invalid {
+    color: var(--color-light-gray);
+}
+
+/* при наведении */
+.input:hover {
+    border-color: var(--color-light);
+}
+
+/* в фокусе при нажатии tab */
+.input:focus {
+    color: var(--color-dark);
+    background-color: var(--color-light-gray);
+    outline: none;
+}
+
+/* решение из сети для скрытия стрелок у числовых инпутов */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.title-medium {
+    font-size: clamp(20px, 2.08vw, 40px);
+    line-height: 1.3;
+}
+
+.title-big {
+    /* минимум 24px, рекомендуемый размер, максимум 60px */
+    font-size: clamp(24px, 3.12vw, 60px);
+    line-height: 1.2;
+}
+
+.section-description {
+    font-size: 20px;
+    line-height: 1.65;
+    text-transform: uppercase;
+    text-align: center;
+    color: var(--color-light);
+}
+
+.backdrop-title {
+    position: relative;
+    z-index: 2;
+}
+
+.backdrop-title::before {
+    content: '';
+    display: block;
+    position: absolute;
+    right: calc(100% + 8px);
+    width: 26px;
+    aspect-ratio: 1;
+    background: url('./icons/plus.svg') center/contain no-repeat;
+}
+
+/* фоновая фраза слева сверху за основным текстом */
+.backdrop-title::after {
+    /* значение подставляется из атрибута data-title элемента с классом backdrop-title */
+    content: attr(data-title);
+    position: absolute;
+    z-index: -1;
+    top: -0.3em;
+    left: -0.6em;
+    font-family: var(--font-family-accent);
+    /*
+    размер текста в 2.8 раза больше, чем font-size родителя (backdrop-title):
+    112px / 40px = 2.8
+    */
+    font-size: 2.8em;
+    line-height: 1;
+    /* прозрачный цвет */
+    color: transparent;
+    /* добавляем вендорный префикс для корректной работы свойства во всех браузерах */
+    /* свойства с вендорным префиксом всегда должны быть выше обычных свойств */
+    -webkit-text-stroke: 1px var(--color-light-gray);
+    text-stroke: 1px var(--color-light-gray);
+}
+
+/* фоновая фраза по центру за основным текстом */
+.backdrop-title.centered::after {
+    /* делаем элемент чуть выше */
+    top: -0.35em;
+    /* центрируем текст посередине */
+    left: 50%;
+    translate: -50% 0;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    column-gap: 20px;
+    min-height: var(--header-height);
+    padding-inline: 32px;
+    background-color: var(--color-dark-alternate);
+}
+
+.header-logo {
+    flex-shrink: 0;
+}
+
+.header-menu-list {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 50px;
+}
+
+.header-menu-link {
+    display: inline-flex;
+    align-items: center;
+    column-gap: 7px;
+    height: var(--header-height);
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 1.2px;
+}
+
+.header-menu-link.is-current::after {
+    content: "";
+    width: 5px;
+    /* пропорции ширины и высоты 1 к 1 */
+    aspect-ratio: 1;
+    /*
+    при помощи ключевого слова currentColor наследуем цвет от родителя
+    при таком походе при наведении цвет кружка также будет меняться в цвет родителя
+    */
+    background-color: currentColor;
+    border-radius: 50%;
+}
+
+.header-actions {
+    display: flex;
+    column-gap: 40px;
+}
+
+.header-burger-button {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    row-gap: 4px;
+    width: 40px;
+    /* пропорции ширины и высоты 1 к 1 */
+    aspect-ratio: 1;
+    padding-left: 8px;
+    color: var(--color-light);
+    /* прозрачный фон */
+    background-color: transparent;
+    border: var(--border);
+    border-radius: 50%;
+}
+
+.header-burger-button:hover {
+    color: var(--color-light-gray);
+    border-color: currentColor;
+}
+
+.header-burger-button-line {
+    width: 6px;
+    height: 1px;
+    /*
+    через currentColor указываем цвет родителя
+    будет автоматически меняться при наведении как у родителя
+    */
+    background-color: currentColor;
+    box-shadow: 16px 0 0 currentColor;
+}
+
+.banner {
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    /* высота банера = 100% высоты экрана - высота header */
+    min-height: calc(100vw - var(--header-height));
+    padding: 36px 70px;
+    color: var(--color-light);
+    background-color: var(--color-dark-alternate);
+}
+
+.banner-body {
+    text-transform: uppercase;
+}
+
+.banner-info {
+    /* нужно для сохранения указанных размеров в дочернем элементе с before */
+    display: flex;
+    align-items: end;
+    /* ширина элемента динамическая в зависимости от ширины экрана, но не более 30px */
+    /* минимальный, рекомендуемый и максимальный размер */
+    font-size: clamp(16px, 1.56vw, 30px);
+    line-height: 1.27;
+    font-weight: 700;
+}
+
+.banner-info::before {
+    content: '';
+    /* размеры применяются, т.к. элемент наследует блочные свойства родителя - display: flex; */
+    /* ширина элемента динамическая в зависимости от ширины экрана, но не более 194px */
+    /* минимальный, рекомендуемый и максимальный размер */
+    width: clamp(60px, 10.1vw, 194px);
+    /* ширина и высота в соотношении 1 к 1 */
+    aspect-ratio: 1;
+    margin-right: 30px;
+    /* URL до изображения, позиционирование по центру/заполнение изображением всего блока, не повторять изображение  */
+    background: url('./icons/bold-arrow-down-right.svg') center/contain no-repeat;
+}
+
+.banner-title {
+    /*
+    применяем минимальный размер:
+      - динамически подстраиваемый при ширине экрана меньше 1920px
+      - не больше 360px при ширине экрана больше 1920px
+    */
+    /* значение в vw вычисляется как 30px / ширину макета (1920px) * 100 */
+    font-size: min(18.75vw, 360px);
+    font-weight: 700;
+    line-height: 1;
+}
+
+.banner-pagination-list {
+    display: flex;
+    justify-content: center;
+}
+
+.banner-pagination-item {
+    /* чтобы высота элементов равнялась высоте содержимого */
+    display: flex;
+}
+
+.banner-pagination-button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 7px;
+    /* прозрачный фон */
+    background-color: transparent;
+    border: none;
+}
+
+.banner-pagination-button::after {
+    content: '';
+    width: 10px;
+    /* высота и ширина 1 к 1 */
+    aspect-ratio: 1;
+    border: var(--border);
+    border-radius: 50%;
+    transition-duration: var(--transition-duration);
+}
+
+.banner-pagination-button.is-current::after {
+    background-color: var(--color-light);
+}
+
+/* все элементы без свойства is-current, в состоянии hover для псевдоэлемента after */
+.banner-pagination-button:not(.is-current):hover::after {
+    border-color: var(--color-light-gray);
+    transition-duration: var(--transition-duration);
+}
+
+/* для только четных элементов */
+.motivation-item:nth-child(even) {
+    background-color: var(--color-dark-alternate);
+}
+
+/* четные элементы */
+.motivation-item:nth-child(even) .motivation-card {
+    /* меняем порядок элементов */
+    flex-direction: row-reverse;
+}
+
+.motivation-card {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    /* минимальный, рекомендуемый и максимальный отступ между текстом и картинкой */
+    /*
+    рекомендуемый отступ высчитывается автоматически в зависимости от ширины экрана
+    (200px по макету делим на 1920 px * 100 = 10.42)
+    */
+    column-gap: clamp(30px, 10.42vw, 200px);
+}
+
+.motivation-card-image {
+    /* отступы сверху и снизу */
+    margin-block: -60px;
+}
+
+.motivation-card-body {
+    padding-left: 35px;
+}
+
+/* все, кроме последнего */
+.motivation-card-title:not(:last-child) {
+    margin-bottom: 14px;
+}
+
+.motivation-card-description {
+    max-width: 400px;
+}
+
+/* все, кроме последнего */
+.motivation-card-description:not(:last-child) {
+    margin-bottom: 37px;
+}
+
+.training-types {
+    position: relative;
+    padding-top: 70px;
+    padding-bottom: 120px;
+    background-color: var(--color-dark);
+}
+
+.training-types-list {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 60px;
+}
+
+.training-types-item {
+    /* локальная переменная для отступа и смещения иконки */
+    --trainingTypesItemBgIconSize: 80px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 32px;
+    padding-top: var(--trainingTypesItemBgIconSize);
+    /* 100% по оси X, 0 по оси Y (правый верхний угол) */
+    background: url('./icons/transparrent-wrrow-bottom-left.svg') 100% 0/var(--trainingTypesItemBgIconSize) no-repeat;
+}
+
+.training-types-item-title {
+    font-size: 16px;
+}
+
+.join-us {
+    background-color: var(--color-dark-alternate);
+}
+
+.join-us-video-wrapper {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 150px 30px;
+    /* центрируем посередине, занимаем все пространство, не повторяем изображение */
+    /* в конце задаем фоновый цвет, если картинка не прогрузится */
+    background: url('./images/join-us-bg.jpg') center/cover no-repeat var(--color-dark-alternate);
+}
+
+.join-us-video {
+    width: 100%;
+    max-width: 960px;
+    /* для сохранения пропорций при уменьшении ширины экрана */
+    height: auto;
+}
+
+.join-us-video-play-button {
+    /* позиционирование посередине */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    /* центрируем будущий контент внутри кнопки по середине */
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    column-gap: 4px;
+    width: 200px;
+    /* сохранение пропорций 1 к 1 к ширине */
+    aspect-ratio: 1;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--color-light);
+    background-color: transparent;
+    border-radius: 50%;
+    border: var(--border);
+}
+
+/* стрелка после кнопки */
+.join-us-video-play-button::after {
+    content: '';
+    width: 26px;
+    aspect-ratio: 1;
+    background: url(./icons/arrow-top-right.svg) center/contain no-repeat;
+    transition-duration: var(--transition-duration);
+}
+
+.join-us-video-play-button:hover {
+    background-color: var(--color-light-gray);
+    color: var(--color-dark);
+}
+
+.join-us-video-play-button:hover::after {
+    filter: invert(1);
+}
+
+.join-us-body {
+    padding-bottom: 150px;
+}
+
+.join-us-title {
+    position: relative;
+    margin-top: -0.4em;
+    /* минимальный, рекомендуемый и максимальный размер шрифта */
+    font-size: clamp(64px, 9.37vw, 180px);
+    line-height: 1;
+    text-align: center;
+}
+
+.join-us-title::after {
+    content: '';
+    /* чтобы подействовали размеры */
+    display: inline-block;
+    /*
+    относительные единицы относительно join-us-title.
+    127/180=0.7
+    */
+    height: 0.7em;
+    aspect-ratio: 1;
+    margin-left: 0.14em;
+    background: url('./icons/bold-arrow-down-right.svg') center/contain no-repeat;
+    /* переворачиваем картинку по вертикали */
+    scale: 1 -1;
+}
+
+.join-us-title:not(:last-child) {
+    margin-bottom: 130px;
+}
+
+.join-us-form-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 7px;
+}
+
+.join-us-form-header:not(:last-child) {
+    margin-bottom: 52px;
+}
+
+.join-us-form-body {
+    display: flex;
+    justify-content: center;
+    column-gap: 20px;
+}
+
+.join-us-form-input {
+    max-width: 400px;
+}
+
+.location {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.location-map-image {
+    /* чтобы при уменьшении ширины экрана высота картинки тоже уменьшалась пропорционально ширине */
+    height: auto;
+}
+
+.location-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /*
+    делаем отступы меньше чем в макете, чтобы позже при адаптиве не пришлось переопределять большие значения,
+    и при этом при уменьшении экрана текст не слипался с краями блока
+    */
+    padding: 80px 15px;
+    text-align: center;
+}
+
+.location-title:not(:last-child) {
+    margin-bottom: 14px;
+}
+
+.location-description {
+    max-width: 490px;
+}
+
+.location-description:not(:last-child) {
+    margin-bottom: 37px;
+}
+
+.family {
+    background-color: var(--color-dark-alternate);
+}
+
+.family-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 7px;
+    padding-top: 132px;
+    padding-bottom: 62px;
+    text-align: center;
+}
+
+.family-body {
+    display: flex;
+    justify-content: center;
+    column-gap: 26px;
+    /* придаем контейнеру поведение слайдера */
+    scroll-snap-type: x mandatory;
+    /* скрол по горизонтали */
+    overflow-x: scroll;
+}
+
+.family-image {
+    /* привязка при скроле к началу элемента в слайдере */
+    scroll-snap-align: start;
+}
+
+.calculate {
+    padding-block: 146px;
+    background-color: var(--color-dark-alternate);
+}
+
+.calculate-inner {
+    display: flex;
+    align-items: center;
+    column-gap: 36px;
+}
+
+.calculate-body {
+    /* чтобы ширины элемента стремилась к максимальному значению */
+    flex-grow: 1;
+    max-width: 627px;
+}
+
+.calculate-title:not(:last-child) {
+    margin-bottom: 16px;
+}
+
+.calculate-description {
+    max-width: 385px;
+}
+
+.calculate-description:not(:last-child) {
+    margin-bottom: 30px;
+}
+
+.calculate-form-body:not(:last-child) {
+    margin-bottom: 26px;
+}
+
+.calculate-form-body {
+    display: grid;
+    /* 2 колонки одинаковой ширины */
+    grid-template-columns: repeat(2, 1fr);
+    /* отступы: 18px по вертикали, 30px по горизонтали */
+    gap: 18px 30px;
+}
+
+.calculate-input.wide {
+    /* значение растянет ячейку на всю ширину родительской сетки */
+    grid-column: -1 / 1;
+}
+
+.calculate-table-wrapper {
+    /* чтобы позиционировать черный круг внутри обертки */
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 610px;
+}
+
+/* черный круг */
+.calculate-table-wrapper::before {
+    content: "";
+    /* позиционирование по середине по всем осям относительно родителя */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    width: 100%;
+    /* для сохранения пропорций */
+    aspect-ratio: 1;
+    background-color: var(--color-dark);
+    border-radius: 50%;
+}
+
+.calculate-table {
+    /* чтобы черный круг - псевдоэлемент не перекрывал таблицу */
+    position: relative;
+    /* убираем невидимые границы между ячейками таблицы */
+    border-collapse: collapse;
+}
+
+/* обращаемся к элементам td и th внутри класса calculate-table */
+.calculate-table :is(td, th) {
+    /* чтобы при уменьшении экрана границы не слипались с текстом */
+    padding-right: 30px;
+}
+
+/* все td и th внутри класса calculate-table, кроме первого */
+.calculate-table :is(td, th):not(:first-child) {
+    padding-left: 30px;
+}
+
+/* граница ячейки справа для всех элементов, кроме последнего (весь первый столбец) */
+.calculate-table :is(td, th):not(:last-child) {
+    border-right: 1px solid var(--color-light-gray);
+}
+
+/* граница ячейки сверху для всех элементов td внутри tbody */
+.calculate-table tbody td {
+    border-top: 1px solid var(--color-light-gray);
+}
+
+.calculate-table tbody tr:last-child td:first-child {
+    /* т.к. псевдоэлемент с линией будет позиционироваться относительно этого элемента */
+    position: relative;
+}
+
+.calculate-table tbody tr:last-child td:first-child::after {
+    content: "";
+    position: absolute;
+    /* прижимаем в правый нижний угол */
+    bottom: 0;
+    right: 0;
+    width: 70%;
+    height: 1px;
+    background-color: var(--color-light-gray);
+}
+
+.calculate-table th {
+    padding-block: 20px;
+    text-align: left;
+    text-transform: uppercase;
+    color: var(--color-light);
+}
+
+.calculate-table td {
+    padding-block: 14px;
+}
+
+.calculate-table tfoot {
+    color: var(--color-light);
+}
+
+.calculate-table tfoot td {
+    padding-top: 33px;
+    padding-bottom: 0;
+}
+
+.footer {
+    /* процентное отношение ширины логотипа относительно всей ширины блока */
+    /* 270 px (ширина логотипа в footer) / 1300 px (ширина всего блока) * 100 */
+    /* выносим в локальную переменную, чтобы не указывать дважды в footer-header и footer-body */
+    --footerLogoWidth: 20.77%;
+}
+
+.footer-main {
+    padding-top: 140px;
+    padding-bottom: 160px;
+}
+
+.footer-header,
+.footer-body {
+    /* используем гриды, чтобы выровнять описание справа от логотипа с нижележащими столбцами */
+    display: grid;
+    column-gap: 62px;
+}
+
+.footer-header {
+    /* используем локальную переменную для указания ширины 1 столбца */
+    grid-template-columns: var(--footerLogoWidth) auto;
+}
+
+.footer-header:not(:last-child) {
+    margin-bottom: 60px;
+}
+
+.footer-logo-image {
+    /* чтобы картинка автоматом уменьшалась в размере при уменьшении ширины экрана */
+    height: auto;
+}
+
+.footer-description {
+    text-align: left;
+}
+
+.footer-body {
+    /* используем локальную переменную для указания ширины 1 столбца */
+    /* колонки под логотипом разбиваем на 4 столбца, первый по ширине как вышележащий, остальные поровну */
+    grid-template-columns: var(--footerLogoWidth) repeat(3, 1fr);
+}
+
+.footer-column-title {
+    /* минимальный, рекомендуемый и максимальный размер */
+    /* рекомендуемый = 22px по макету / 1920 (ширина макета) * 100 */
+    font-size: clamp(18px, 1.15vw, 22px);
+}
+
+.footer-column-title:not(:last-child) {
+    margin-bottom: 15px;
+}
+
+.footer-schedule:not(:last-child) {
+    margin-bottom: 13px;
+}
+
+.footer-address {
+    font-style: normal;
+}
+
+.footer-address:not(:last-child) {
+    margin-bottom: 35px;
+}
+
+.footer-column-title.has-arrow::after {
+    content: '';
+    /* чтобы подействовали размеры */
+    display: inline-block;
+    /*
+    16.3px (высота стрелки по макету) / 22px (font-size у footer-column-title) = 0.7
+    */
+    height: 0.74em;
+    aspect-ratio: 1;
+    margin-left: 0.5em;
+    background: url('./icons/bold-arrow-down-right.svg') center/contain no-repeat;
+    /* переворачиваем картинку по горизонтали */
+    scale: -1 1;
+}
+
+.footer-subscribe {
+    /* чтобы позиционировать кнопку внутри формы */
+    position: relative;
+}
+
+.footer-subscribe:not(:last-child) {
+    margin-bottom: 50px;
+}
+
+.footer-subscribe-input {
+    padding-right: 70px;
+}
+
+.footer-subscribe-button {
+    position: absolute;
+    /* сдвигаем кнопку в правый верхний угол */
+    top: 0;
+    right: 0;
+    /* по высоте всей формы */
+    height: 100%;
+    /* с пропорциями 1 к 1  */
+    aspect-ratio: 1;
+    background: url('./icons/arrow-top-right.svg') center/70% no-repeat;
+    border: var(--border);
+    border-radius: 50%;
+}
+
+.footer-subscribe-button:hover {
+    background-color: var(--color-light-gray);
+}
+
+.footer-soc1als-list {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    column-gap: 18px;
+}
+
+.footer-soc1als-link {
+    /* чтобы иконки отображались */
+    display: flex;
+    width: 23px;
+}
+
+.footer-extra {
+    padding-block: 15px;
+    background-color: var(--color-dark-alternate);
+}
+
+.footer-copyright {
+    font-size: 14px;
+}
+
+
+/* при ширине экрана менее 1920px */
+@media (max-width: 1919px) {
+
+    .motivation-card-image {
+        margin-block: -20px;
+    }
+
+}
+
+/* при ширине экрана менее 1280 */
+@media (max-width: 1280px) {
+    /* уменьшаем кол-во колонок до 3 */
+    .training-types-list {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* при ширине экрана менее 1024px */
+@media (max-width: 1024px) {
+
+    .header {
+        /* разрешаем перенос элементов на другую строку */
+        flex-wrap: wrap;
+        row-gap: 10px;
+        padding-top: 20px;
+    }
+
+    .header,
+    .banner {
+        padding-inline: 15px;
+    }
+
+    .header-menu {
+        /* переносим меню в конец элементов header */
+        order: 1;
+        /* занимаем всю доступную ширину */
+        flex-basis: 100%;
+    }
+
+    .header-menu-link {
+        /* уменьшаем высоту ссылок */
+        height: 50px;
+    }
+
+    .banner {
+        row-gap: 10px;
+    }
+
+    .motivation-card {
+        padding-block: 50px;
+    }
+
+    .motivation-card-image {
+        max-width: 30%;
+        height: auto;
+        margin-block: 0;
+    }
+
+    .join-us-body {
+        padding-bottom: 80px;
+    }
+
+    .join-us-title:not(:last-child) {
+        margin-bottom: 80px;
+    }
+
+    .location {
+        display: flex;
+        flex-direction: column-reverse;
+    }
+
+    .family-image {
+        height: 360px;
+    }
+
+    .calculate {
+        padding-block: 100px;
+    }
+
+    .calculate-inner {
+        column-gap: 20px;
+    }
+
+    .calculate-form-body {
+        grid-template-columns: 1fr;
+    }
+
+    .calculate-button {
+        width: 100%;
+    }
+
+    .calculate-table :is(td, th) {
+        padding-block: 10px;
+    }
+
+    .calculate-table tfoot td {
+        padding-top: 10px;
+    }
+
+    .footer-main {
+        padding-top: 80px;
+        padding-bottom: 50px;
+    }
+
+    .footer-header {
+        /* чтобы логотип не уменьшался слишком сильно при дальнейшем уменьшении ширины экрана */
+        display: flex;
+        flex-direction: column;
+        row-gap: 30px;
+    }
+
+    .footer-body {
+        grid-template-columns: repeat(2, 1fr);
+        row-gap: 30px;
+    }
+
+}
+
+/* при ширине экрана менее 768px */
+@media (max-width: 767px) {
+
+    .button {
+        padding-inline: 18px;
+    }
+
+    .header {
+        padding-top: 10px;
+    }
+
+    .header-menu-list {
+        column-gap: 24px;
+    }
+
+    .header-menu-link {
+        height: 32px;
+    }
+
+    .header-actions {
+        column-gap: 15px;
+    }
+
+    .banner-info {
+        margin-bottom: 5px;
+    }
+
+    .banner-info::before {
+        margin-right: 10px;
+    }
+
+    .motivation-card,
+    .motivation-item:nth-child(even) .motivation-card {
+        flex-direction: column-reverse;
+    }
+
+    .motivation-card {
+        row-gap: 30px;
+        padding-block: 30px;
+    }
+
+    .motivation-card-image {
+        max-width: 60%;
+    }
+
+    .motivation-card-description:not(:last-child) {
+        margin-bottom: 20px;
+    }
+
+    /* уменьшаем кол-во колонок до 2 */
+    .training-types-list {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+    }
+
+    .training-types-item {
+        --trainingTypesItemBgIconSize: 50px;
+        row-gap: 10px;
+    }
+
+    .training-types-image {
+        max-width: 120px
+    }
+
+    .join-us-video-play-button {
+        width: 140px;
+    }
+
+    .join-us-title:not(:last-child) {
+        margin-bottom: 40px;
+    }
+
+    .section-description {
+        font-size: 16px;
+    }
+
+    .join-us-form-body {
+        flex-direction: column;
+        align-items: center;
+        row-gap: 20px;
+    }
+
+    .location-body {
+        padding-block: 40px;
+    }
+
+    .location-description:not(:last-child) {
+        margin-bottom: 20px;
+    }
+
+    .family-header {
+        padding-top: 80px;
+        padding-bottom: 50px;
+    }
+
+    .family-body {
+        column-gap: 12px;
+    }
+
+    .family-image {
+        height: 180px;
+    }
+
+    .calculate {
+        padding-block: 60px;
+    }
+
+    .calculate-inner {
+        flex-direction: column;
+        row-gap: 30px;
+    }
+
+    .calculate-table-wrapper::before {
+        display: none;
+    }
+
+    .footer-body {
+        /* уменьшаем кол-во колонок до 1 */
+        grid-template-columns: 1fr;
+    }
+
+    .footer-main {
+        padding-top: 50px;
+    }
+
+    .footer-header:not(:last-child) {
+        margin-bottom: 30px;
+    }
+
+    .footer-subscribe:not(:last-child) {
+        margin-bottom: 40px;
+    }
+
+}
